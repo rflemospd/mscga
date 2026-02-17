@@ -1,0 +1,5 @@
+[
+  { "username": "viewer1", "role": "viewer", "password": "trocar-imediatamente" },
+  { "username": "ops1", "role": "ops", "password": "trocar-imediatamente" },
+  { "username": "admin1", "role": "admin", "password": "trocar-imediatamente" }
+]
