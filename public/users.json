@@ -1,0 +1,29 @@
+[
+  {
+    "username": "viewer1",
+    "role": "viewer",
+    "salt": "sTHEVDXdx6Ry6rssLTgpFQ==",
+    "iterations": 310000,
+    "hash": "200j6HWpLKZt9FgRPHexTkdQPrqMwBtGTI9k6Y882Ho=",
+    "hashAlg": "SHA-256",
+    "dkLen": 32
+  },
+  {
+    "username": "ops1",
+    "role": "ops",
+    "salt": "0Jay1uoVYQj+xoJNQirOxQ==",
+    "iterations": 310000,
+    "hash": "P2E9xW/UyjvIetGj2ZP07xuG7G7ld6i79g9me94NDxs=",
+    "hashAlg": "SHA-256",
+    "dkLen": 32
+  },
+  {
+    "username": "admin1",
+    "role": "admin",
+    "salt": "uA7M1k3GTUE01SJTvBgXjg==",
+    "iterations": 310000,
+    "hash": "CxMpq4+UF35xKfvT6d9DQhHSKZiTYSy9HmmifZcTUcA=",
+    "hashAlg": "SHA-256",
+    "dkLen": 32
+  }
+]
