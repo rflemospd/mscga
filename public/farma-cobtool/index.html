@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CobTool</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230e0f10'/%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-size='28' fill='%23e9e9ea'%3ECT%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=1.0.6">
+</head>
+<body class="caps-all">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand" role="button" id="nav-brand" tabindex="0" aria-label="Voltar ao menu principal">
+          <span class="badge">CT</span>
+          <div class="cnpj-convert">
+            <button id="cnpjToggle" class="btn btn-sm btn-toggle" type="button" aria-label="Converter CNPJ">
+              <i class="bi bi-arrow-left-right" aria-hidden="true"></i>
+            </button>
+            <div id="cnpjBox" class="cnpj-box">
+              <input id="cnpjConvert" type="text" inputmode="numeric" placeholder="CNPJ" aria-label="Converter CNPJ" />
+              <button id="cnpjCopy" class="btn btn-sm btn-toggle" type="button" aria-label="Copiar CNPJ">
+                <i class="bi bi-clipboard" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="msg-counter" aria-live="polite" aria-label="Contador de mensagens">
+          <button id="msg-counter-decrease" class="btn btn-sm nav-btn icon" type="button" aria-label="Diminuir mensagens enviadas">
+            <i class="bi bi-dash" aria-hidden="true"></i>
+          </button>
+          <div class="msg-counter-info">
+            <span><strong id="msg-counter-sent">0</strong><span class="msg-label-sent"> enviadas</span></span>
+            <span><strong id="msg-counter-remaining">200</strong><span class="msg-label-remaining"> restantes</span></span>
+          </div>
+          <button id="msg-counter-increase" class="btn btn-sm nav-btn icon" type="button" aria-label="Aumentar mensagens enviadas">
+            <i class="bi bi-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="menu-dropdown" id="nav-menu-dropdown">
+          <button id="nav-menu-toggle" class="btn btn-sm nav-btn icon" type="button" aria-label="Abrir menu" aria-expanded="false">
+            <i class="bi bi-list" aria-hidden="true"></i>
+          </button>
+          <div class="menu-dropdown-panel" id="nav-menu-panel" hidden>
+            <span class="menu-dropdown-title">OPÇÕES</span>
+            <button id="nav-backup" class="btn btn-sm nav-btn" type="button" data-page="import-export">
+              <i class="bi bi-box-arrow-in-down" aria-hidden="true"></i>
+              <span>BACKUP</span>
+            </button>
+            <button id="toggleTheme" class="btn btn-sm nav-btn" type="button" aria-pressed="false" aria-label="Alternar tema">
+              <i class="bi bi-brightness-high" aria-hidden="true"></i>
+              <span>MODO DE CORES</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <!-- Página inicial -->
+      <section id="page-home" class="page active">
+        <div class="home-grid">
+          <button class="card home-card" data-page="menu-formatacao">
+            <i class="bi bi-grid-1x2" aria-hidden="true"></i>
+            <span>FORMATAÇÃO</span>
+          </button>
+          <button class="card home-card" data-page="menu-esfera">
+            <i class="bi bi-gear" aria-hidden="true"></i>
+            <span>ESFERA - OPERAÇÃO</span>
+          </button>
+          <button class="card home-card" data-page="notificacao-extrajudicial">
+            <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+            <span>NOTIFICAÇÃO EXTRAJUDICIAL</span>
+          </button>
+          <button class="card home-card" data-page="neg-cadastro">
+            <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
+            <span>CADASTRO DE CLIENTES</span>
+          </button>
+          <button class="card home-card" data-page="alfa">
+            <i class="bi bi-chat-left-dots" aria-hidden="true"></i>
+            <span>ALFA</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Página: Menu de Cadastro -->
+      <section id="page-menu-cadastro" class="page">
+        <h2 class="panel-title mb-2">
+          <i class="bi bi-person-badge" aria-hidden="true"></i>
+          <span>CADASTRO</span>
+        </h2>
+        <div class="home-grid">
+          <button class="card home-card" data-page="neg-cadastro">
+            <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
+            <span>CADASTRO DE CLIENTES</span>
+          </button>
+          <button class="card home-card" data-page="registro-representantes">
+            <i class="bi bi-person-badge" aria-hidden="true"></i>
+            <span>CADASTRO DE REPRESENTANTES</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Página: Menu de Formatação -->
+      <section id="page-menu-formatacao" class="page">
+        <h2 class="panel-title mb-2">
+          <i class="bi bi-grid-1x2" aria-hidden="true"></i>
+          <span>FORMATAÇÃO</span>
+        </h2>
+        <div class="home-grid">
+          <button class="card home-card" data-page="formatacao">
+            <i class="bi bi-clipboard-check" aria-hidden="true"></i>
+            <span>FORMATAÇÃO DE TÍTULOS</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Página: Menu Esfera / Operação -->
+      <section id="page-menu-esfera" class="page">
+        <h2 class="panel-title mb-2">
+          <i class="bi bi-gear" aria-hidden="true"></i>
+          <span>ESFERA - OPERAÇÃO</span>
+        </h2>
+        <div class="home-grid">
+          <button class="card home-card" data-page="negociacoes">
+            <i class="bi bi-hand-thumbs-up" aria-hidden="true"></i>
+            <span>NEGOCIAÇÕES</span>
+          </button>
+          <button class="card home-card" data-page="compensacoes">
+            <i class="bi bi-cash-coin" aria-hidden="true"></i>
+            <span>COMPENSAÇÕES</span>
+          </button>
+          <button class="card home-card" data-page="transferencias">
+            <i class="bi bi-arrow-down-up" aria-hidden="true"></i>
+            <span>TRANSFERÊNCIAS</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Página: Registro de Contato -->
+      <section id="page-registro-contato" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-chat-dots" aria-hidden="true"></i>
+                  <span>REGISTRO DE CONTATO</span>
+                </h2>
+                <div class="rc-greet-switches">
+                  <div class="rc-greet">
+                    <span class="rc-greet-label">DIA</span>
+                    <label class="form-check form-switch compact-switch mb-0">
+                      <input id="rc-greet-time" class="form-check-input" type="checkbox" aria-label="Período da saudação">
+                      <span class="form-check-label">TARDE</span>
+                    </label>
+                  </div>
+                  <div class="rc-greet rc-greet-right">
+                    <label class="form-check form-switch compact-switch mb-0">
+                      <input id="rc-greet-id" class="form-check-input" type="checkbox" aria-label="Saudação com identificação">
+                      <span class="form-check-label visually-hidden">Identificação</span>
+                    </label>
+                    <span class="rc-greet-label rc-greet-label-right">IDENTIFICAÇÃO</span>
+                  </div>
+                </div>
+                <div class="rc-buttons">
+                  <button class="btn btn-sm" type="button" data-rc-msg="1º Contato" data-rc-random="1">1º Contato</button>
+                  <button class="btn btn-sm" type="button" data-rc-msg="4 ~ 6 dias">4 ~ 6 dias</button>
+                  <button class="btn btn-sm" type="button" data-rc-msg="6 ~ 8 dias">6 ~ 8 dias</button>
+                  <button class="btn btn-sm" type="button" data-rc-msg="8 ~ 10 dias">8 ~ 10 dias</button>
+                  <button class="btn btn-sm" type="button" data-rc-msg="10 ~ 15 dias">10 ~ 15 dias</button>
+                  <button class="btn btn-sm" type="button" data-rc-msg="15 ~ 30 dias">15 ~ 30 dias</button>
+                </div>
+
+                <div class="rc-message">
+                  <div class="ft-bubble">
+                    <div id="rc-message" class="editor-area ft-editor empty" contenteditable="false" role="textbox" aria-label="Mensagem do WhatsApp"></div>
+                    <div class="ft-bubble-meta">
+                      <span id="rc-clock">--:--</span>
+                      <span class="checks"><span class="check"></span><span class="check"></span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rc-dual">
+                  <div>
+                    <label for="rc-resumo">RESUMO DO CONTATO</label>
+                    <textarea id="rc-resumo" rows="6" placeholder="Digite o resumo do contato"></textarea>
+                    <div class="rc-resumo-switch">
+                      <label class="form-check form-switch compact-switch mb-0">
+                        <input id="rc-waiting" class="form-check-input" type="checkbox" aria-label="Aguardando retorno">
+                        <span class="form-check-label">AGUARDANDO RETORNO</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="rc-ultimos">ÚLTIMOS RESUMOS</label>
+                    <textarea id="rc-ultimos" rows="6" placeholder="Cole aqui os últimos resumos"></textarea>
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button class="btn btn-sm" id="rc-gerar-historico" type="button">
+                    <i class="bi bi-journal-plus" aria-hidden="true"></i>
+                    <span>GERAR HISTÓRICO</span>
+                  </button>
+                </div>
+
+                <div class="rc-history">
+                  <label for="rc-historico">HISTÓRICO ATUALIZADO</label>
+                  <textarea id="rc-historico" class="output ft-output" rows="8" readonly></textarea>
+                </div>
+
+                <div class="actions">
+                  <button class="btn btn-sm" id="rc-copiar-historico" type="button">
+                    <i class="bi bi-clipboard" aria-hidden="true"></i>
+                    <span>COPIAR HISTÓRICO</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Emissão de Boletos -->
+      <section id="page-emissao-boletos" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12 col-lg-5 col-xl-4">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-receipt" aria-hidden="true"></i>
+                  <span>EMISSÃO DE BOLETOS</span>
+                </h2>
+                <div class="bol-type-switches">
+                  <label class="form-check form-switch compact-switch mb-0 bol-type">
+                    <input id="bol-type-tv" class="form-check-input" type="checkbox" checked>
+                    <span class="form-check-label">TELE VENDEDOR(A)</span>
+                  </label>
+                  <label class="form-check form-switch compact-switch mb-0 bol-type">
+                    <input id="bol-type-rep" class="form-check-input" type="checkbox">
+                    <span class="form-check-label">REPRESENTANTE EXTERNO</span>
+                  </label>
+                  <label class="form-check form-switch compact-switch mb-0 bol-type">
+                    <input id="bol-type-cli" class="form-check-input" type="checkbox">
+                    <span class="form-check-label">CLIENTE</span>
+                  </label>
+                </div>
+
+                <div id="bol-tv-form" class="rep-form">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label for="bol-tv-nome">NOME</label>
+                      <input id="bol-tv-nome" type="text" placeholder="NOME" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="bol-tv-id">ID</label>
+                      <input id="bol-tv-id" type="text" placeholder="ID" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="bol-tv-email">E-MAIL</label>
+                      <input id="bol-tv-email" type="text" placeholder="id@pratidonaduzzi.com.br" />
+                    </div>
+                  </div>
+                  <div class="bol-results table-responsive d-none" id="bol-tv-results-wrap">
+                    <table class="table table-sm mb-0 neg-table">
+                      <thead>
+                        <tr>
+                          <th>NOME</th>
+                          <th>ID</th>
+                          <th>E-MAIL</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bol-tv-results">
+                        <tr>
+                          <td colspan="3" class="text-center text-muted">Digite para buscar.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div id="bol-rep-form" class="rep-form d-none">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label for="bol-rep-nome">NOME</label>
+                      <input id="bol-rep-nome" type="text" placeholder="NOME" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="bol-rep-estado">ESTADO</label>
+                      <input id="bol-rep-estado" class="guard-uf" type="text" placeholder="UF" maxlength="2" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="bol-rep-telefone">TELEFONE</label>
+                      <input id="bol-rep-telefone" class="guard-telefone" type="text" placeholder="+55 00 00000-0000" />
+                    </div>
+                    <div class="col-12">
+                      <label for="bol-rep-email">E-MAIL</label>
+                      <input id="bol-rep-email" type="text" placeholder="email@dominio.com" />
+                    </div>
+                  </div>
+                  <div class="bol-results table-responsive d-none" id="bol-rep-results-wrap">
+                    <table class="table table-sm mb-0 neg-table">
+                      <thead>
+                        <tr>
+                          <th>NOME</th>
+                          <th>UF</th>
+                          <th>TELEFONE</th>
+                          <th>E-MAIL</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bol-rep-results">
+                        <tr>
+                          <td colspan="4" class="text-center text-muted">Digite para buscar.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div id="bol-cli-form" class="rep-form d-none">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label for="bol-cli-telefone">TELEFONE</label>
+                      <input id="bol-cli-telefone" class="guard-telefone" type="text" placeholder="+55 00 00000-0000" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rep-form mt-2">
+                  <div class="row g-2">
+                    <div class="col-12 col-md-6">
+                      <label for="bol-quantidade">NÚMERO DE BOLETOS</label>
+                      <input id="bol-quantidade" type="number" min="0" step="1" placeholder="0" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="bol-meta">DENTRO DA META</label>
+                      <input id="bol-meta" type="number" min="0" step="1" placeholder="0" />
+                    </div>
+                    <div class="col-12">
+                      <label for="bol-quais">QUAIS BOLETOS SOLICITADOS</label>
+                      <textarea id="bol-quais" rows="3" placeholder="Ex.: NF 123, NF 456..." disabled aria-disabled="true"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="btn btn-sm" id="bol-salvar" type="button">
+                  <i class="bi bi-save" aria-hidden="true"></i>
+                  <span>REGISTRAR SOLICITAÇÃO</span>
+                </button>
+              </div>
+            </section>
+          </div>
+          <div class="col-12 col-lg-7 col-xl-8">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="bi bi-list-ul" aria-hidden="true"></i>
+                    <span>SOLICITAÇÕES</span>
+                  </span>
+                </h2>
+                <div class="table-responsive neg-table-wrap">
+                  <table class="table table-sm mb-0 neg-table">
+                    <thead>
+                      <tr>
+                        <th>SOLICITANTE</th>
+                        <th>TIPO</th>
+                        <th>N DE BOLETOS</th>
+                        <th>META</th>
+                        <th>DATA</th>
+                        <th style="width:1%">AÇÕES</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bol-tbody">
+                      <tr>
+                        <td colspan="6" class="text-center text-muted">Nenhuma solicitação registrada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Menu de Negociações -->
+      <section id="page-neg-menu" class="page">
+        <h2 class="panel-title mb-2">
+          <i class="bi bi-handshake" aria-hidden="true"></i>
+          <span>NEGOCIAÇÕES</span>
+        </h2>
+        <div class="home-grid">
+          <button class="card home-card" data-page="neg-cad-negociacoes">
+            <i class="bi bi-journal-plus" aria-hidden="true"></i>
+            <span>CADASTRO DE NEGOCIAÇÕES</span>
+          </button>
+          <button class="card home-card" data-page="neg-andamento">
+            <i class="bi bi-card-checklist" aria-hidden="true"></i>
+            <span>NEGOCIAÇÕES EM ANDAMENTO</span>
+          </button>
+          <button class="card home-card" data-page="neg-finalizadas">
+            <i class="bi bi-check2-circle" aria-hidden="true"></i>
+            <span>NEGOCIAÇÕES FINALIZADAS</span>
+          </button>
+          <button class="card home-card" data-page="neg-canceladas">
+            <i class="bi bi-x-circle" aria-hidden="true"></i>
+            <span>NEGOCIAÇÕES CANCELADAS</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Página: Registro de Representantes -->
+      <section id="page-registro-representantes" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12 col-lg-5 col-xl-4">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-person-badge" aria-hidden="true"></i>
+                  <span>REGISTRO DE REPRESENTANTES</span>
+                </h2>
+                <div class="rep-toggle">
+                  <span class="rep-toggle-label">TELE VENDEDOR(A)</span>
+                  <label class="form-check form-switch compact-switch mb-0" for="rep-tipo">
+                    <input id="rep-tipo" class="form-check-input" type="checkbox" aria-label="Tipo de representante">
+                    <span class="form-check-label visually-hidden">Tipo de representante</span>
+                  </label>
+                  <span class="rep-toggle-label">REPRESENTANTE EXTERNO</span>
+                </div>
+                <div id="rep-tv-form" class="rep-form">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label for="rep-tv-nome">NOME</label>
+                      <input id="rep-tv-nome" type="text" placeholder="NOME" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="rep-tv-id">ID</label>
+                      <input id="rep-tv-id" type="text" placeholder="ID" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="rep-tv-email">E-MAIL</label>
+                      <input id="rep-tv-email" type="text" placeholder="id@pratidonaduzzi.com.br" />
+                    </div>
+                  </div>
+                </div>
+                <div id="rep-rep-form" class="rep-form d-none">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label for="rep-rep-nome">NOME</label>
+                      <input id="rep-rep-nome" type="text" placeholder="NOME" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="rep-rep-estado">ESTADO</label>
+                      <input id="rep-rep-estado" class="guard-uf" type="text" placeholder="UF" maxlength="2" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label for="rep-rep-telefone">TELEFONE</label>
+                      <input id="rep-rep-telefone" class="guard-telefone" type="text" placeholder="+55 00 00000-0000" />
+                    </div>
+                    <div class="col-12">
+                      <label for="rep-rep-email">E-MAIL</label>
+                      <input id="rep-rep-email" type="text" placeholder="email@dominio.com" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="btn btn-sm" id="rep-salvar" type="button">
+                  <i class="bi bi-save" aria-hidden="true"></i>
+                  <span>REGISTRAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+          <div class="col-12 col-lg-7 col-xl-8">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="bi bi-list-ul" aria-hidden="true"></i>
+                    <span>CADASTROS</span>
+                  </span>
+                </h2>
+                <div id="rep-tv-list-wrap" class="table-responsive neg-table-wrap">
+                  <table class="table table-sm mb-0 neg-table">
+                    <thead>
+                      <tr>
+                        <th>NOME</th>
+                        <th>ID</th>
+                        <th>E-MAIL</th>
+                        <th style="width:1%">AÇÕES</th>
+                      </tr>
+                    </thead>
+                    <tbody id="rep-tv-tbody">
+                      <tr>
+                        <td colspan="4" class="text-center text-muted">Nenhum televendedor cadastrado.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="rep-rep-list-wrap" class="table-responsive neg-table-wrap d-none">
+                  <table class="table table-sm mb-0 neg-table">
+                    <thead>
+                      <tr>
+                        <th>NOME</th>
+                        <th>ESTADO</th>
+                        <th>TELEFONE</th>
+                        <th>E-MAIL</th>
+                        <th style="width:1%">AÇÕES</th>
+                      </tr>
+                    </thead>
+                    <tbody id="rep-rep-tbody">
+                      <tr>
+                        <td colspan="5" class="text-center text-muted">Nenhum representante cadastrado.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Negociações em andamento -->
+      <section id="page-neg-andamento" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-list-task" aria-hidden="true"></i>
+                  <span>NEGOCIAÇÕES EM ANDAMENTO</span>
+                </h2>
+                <div class="tr-toolbar">
+                  <div class="tr-toolbar-left">
+                    <button class="btn btn-sm" id="neg-andamento-export" type="button">
+                      <i class="bi bi-clipboard" aria-hidden="true"></i>
+                      <span>EXPORTAR TABELA</span>
+                    </button>
+                  </div>
+                  <div class="tr-toolbar-right"></div>
+                </div>
+                <div class="table-responsive neg-table-wrap">
+                  <table class="table table-sm mb-0 neg-table">
+                    <thead>
+                      <tr>
+                        <th>CÓD.</th>
+                        <th>CNPJ</th>
+                        <th>ÚLTIMA PARC. PAGA</th>
+                        <th>DIAS</th>
+                        <th>PROGRESSO</th>
+                      </tr>
+                    </thead>
+                    <tbody id="neg-andamento-body">
+                  <tr>
+                    <td colspan="5" class="text-center text-muted">Nenhuma negociação cadastrada.</td>
+                  </tr>
+                </tbody>
+              </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Negociações finalizadas -->
+      <section id="page-neg-finalizadas" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                  <span>NEGOCIAÇÕES FINALIZADAS</span>
+                </h2>
+                <div class="tr-toolbar">
+                  <div class="tr-toolbar-left">
+                    <button class="btn btn-sm" id="neg-finalizadas-export" type="button">
+                      <i class="bi bi-clipboard" aria-hidden="true"></i>
+                      <span>EXPORTAR TABELA</span>
+                    </button>
+                  </div>
+                  <div class="tr-toolbar-right"></div>
+                </div>
+                <div class="table-responsive neg-table-wrap">
+                  <table class="table table-sm mb-0 neg-table">
+                    <thead>
+                      <tr>
+                        <th>CÓD.</th>
+                        <th>CNPJ</th>
+                        <th>DIAS</th>
+                        <th>PROGRESSO</th>
+                      </tr>
+                    </thead>
+                    <tbody id="neg-finalizadas-body">
+                      <tr>
+                        <td colspan="4" class="text-center text-muted">Nenhuma negociação cadastrada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Negociações canceladas -->
+      <section id="page-neg-canceladas" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-x-circle" aria-hidden="true"></i>
+                  <span>NEGOCIAÇÕES CANCELADAS</span>
+                </h2>
+                <div class="tr-toolbar">
+                  <div class="tr-toolbar-left">
+                    <button class="btn btn-sm" id="neg-canceladas-export" type="button">
+                      <i class="bi bi-clipboard" aria-hidden="true"></i>
+                      <span>EXPORTAR TABELA</span>
+                    </button>
+                  </div>
+                  <div class="tr-toolbar-right"></div>
+                </div>
+                <div class="table-responsive neg-table-wrap">
+                  <table class="table table-sm mb-0 neg-table">
+                    <thead>
+                      <tr>
+                        <th>CÓD.</th>
+                        <th>CNPJ</th>
+                        <th>DIAS</th>
+                        <th>PROGRESSO</th>
+                      </tr>
+                    </thead>
+                    <tbody id="neg-canceladas-body">
+                      <tr>
+                        <td colspan="4" class="text-center text-muted">Nenhuma negociação cadastrada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Formatação de Títulos -->
+      <section id="page-formatacao" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <nav class="modebar mb-2" aria-label="MODO">
+                <button class="btn primary w-100 btn-sm" id="f-tab-aberto">
+                  <i class="bi bi-list-check" aria-hidden="true"></i>
+                  <span>EM ABERTO</span>
+                </button>
+                <button class="btn w-100 btn-sm" id="f-tab-atual">
+                  <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                  <span>ATUALIZADOS</span>
+                </button>
+              </nav>
+
+              <!-- MODO: ABERTO -->
+              <section id="f-m-aberto" class="mode active" aria-labelledby="f-tab-aberto">
+                <div class="panel-section">
+                  <h2 class="panel-title">
+                    <i class="bi bi-clipboard-data" aria-hidden="true"></i>
+                    <span>DADOS</span>
+                  </h2>
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label for="f-razaoA">RAZÃO SOCIAL</label>
+                      <input id="f-razaoA" type="text" placeholder="EX.: EMPRESA EXEMPLO LTDA" />
+                    </div>
+                    <div class="col-12">
+                    <label for="f-cnpjA">CNPJ</label>
+                    <input id="f-cnpjA" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                  </div>
+                  <div class="col-12">
+                    <label for="f-esfera">TEXTO DO ESFERA</label>
+                    <textarea id="f-esfera" placeholder="COLE AQUI O TEXTO DO ESFERA CONFORME RECEBIDO..."></textarea>
+                  </div>
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button class="btn primary btn-sm" id="f-gerarA" title="Ctrl+Enter">
+                    <i class="bi bi-play-fill" aria-hidden="true"></i>
+                    <span>GERAR</span>
+                  </button>
+                  <button class="btn btn-sm" id="f-limparA" title="Esc">
+                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    <span>LIMPAR</span>
+                  </button>
+                </div>
+              </section>
+
+              <!-- MODO: ATUALIZADOS -->
+              <section id="f-m-atual" class="mode" aria-labelledby="f-tab-atual">
+                <div class="panel-section">
+                  <h2 class="panel-title">
+                    <i class="bi bi-building" aria-hidden="true"></i>
+                    <span>EMPRESA</span>
+                  </h2>
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label for="f-razao">RAZÃO SOCIAL</label>
+                      <input id="f-razao" type="text" placeholder="EX.: EMPRESA EXEMPLO LTDA" />
+                    </div>
+                    <div class="col-12">
+                    <label for="f-cnpj">CNPJ</label>
+                    <input id="f-cnpj" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel-section">
+                  <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                    <h2 class="panel-title mb-0">
+                      <i class="bi bi-journal-plus" aria-hidden="true"></i>
+                      <span>TÍTULOS</span>
+                    </h2>
+                    <button class="btn icon" id="f-add" aria-label="Adicionar título">
+                      <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <div id="f-rows" class="grid tight"></div>
+                </div>
+
+                <div class="actions">
+                  <button class="btn primary btn-sm" id="f-gerar" title="Ctrl+Enter">
+                    <i class="bi bi-play-fill" aria-hidden="true"></i>
+                    <span>GERAR</span>
+                  </button>
+                  <button class="btn btn-sm" id="f-limpar" title="Esc">
+                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    <span>LIMPAR</span>
+                  </button>
+                </div>
+              </section>
+            </section>
+          </div>
+
+          <div class="col-12">
+            <div class="d-flex flex-column gap-2 h-100">
+              <section class="card output-wrap" id="f-wrapA" aria-live="polite">
+                <label for="f-outA" class="mb-1">MENSAGEM FORMATADA</label>
+                <pre id="f-outA" class="output"></pre>
+                <div class="out-actions">
+                  <button class="btn btn-sm" id="f-copiarA">
+                    <i class="bi bi-clipboard" aria-hidden="true"></i>
+                    <span>COPIAR</span>
+                  </button>
+                </div>
+              </section>
+
+              <section class="card output-wrap" id="f-wrap" aria-live="polite">
+                <pre id="f-out" class="output"></pre>
+                <div class="out-actions">
+                  <button class="btn btn-sm" id="f-copiar">
+                    <i class="bi bi-clipboard" aria-hidden="true"></i>
+                    <span>COPIAR</span>
+                  </button>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Formatação de Texto -->
+      <section id="page-formatacao-texto" class="page page-formatacao-texto">
+        <div class="ft-layout">
+          <div class="ft-block">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                  <span>EDITOR</span>
+                </h2>
+                <div class="editor-toolbar">
+                  <button class="btn btn-sm" type="button" data-ft-action="bold">
+                    <i class="bi bi-type-bold" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Negrito</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" data-ft-action="italic">
+                    <i class="bi bi-type-italic" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Itálico</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" data-ft-action="strike">
+                    <i class="bi bi-type-strikethrough" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Rasurado</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" data-ft-action="quote">
+                    <i class="bi bi-chat-square-quote" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Citação</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" data-ft-action="code-inline">
+                    <i class="bi bi-code-slash" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Código Número</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" data-ft-action="code-block">
+                    <i class="bi bi-terminal" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Monoespaçado</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" data-ft-action="ul">
+                    <i class="bi bi-list-ul" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Lista Bullet</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" data-ft-action="ol">
+                    <i class="bi bi-list-ol" aria-hidden="true"></i>
+                    <span class="ft-btn-label">Lista Numerada</span>
+                  </button>
+                </div>
+                <div class="ft-io">
+                  <div class="ft-io-col">
+                    <div class="ft-bubble">
+                      <div id="ft-editor" class="editor-area ft-editor empty" contenteditable="true" role="textbox" aria-label="Digite sua mensagem aqui"></div>
+                      <div class="ft-bubble-meta">
+                        <span id="ft-clock">--:--</span>
+                        <span class="checks"><span class="check"></span><span class="check"></span></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ft-io-copy">
+                    <button class="btn btn-sm" type="button" id="ft-copy">
+                      <i class="bi bi-clipboard" aria-hidden="true"></i>
+                      <span>COPIAR</span>
+                    </button>
+                  </div>
+                  <div class="ft-io-col">
+                    <textarea id="ft-output" class="output ft-output" readonly aria-label="Texto formatado para WhatsApp"></textarea>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Formatação de Cobranças -->
+      <section id="page-formatacao-cobrancas" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                  <span>DADOS DO CLIENTE (WHATSAPP)</span>
+                </h2>
+                <div class="row g-2">
+                  <div class="col-12 col-md-4">
+                    <label for="fc-codigo">CÓDIGO</label>
+                    <input id="fc-codigo" class="guard-codigo" type="text" inputmode="numeric" maxlength="6" placeholder="000000" />
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="fc-cnpj">CNPJ</label>
+                    <input id="fc-cnpj" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="fc-uf">UF</label>
+                    <input id="fc-uf" class="guard-uf" type="text" maxlength="2" placeholder="UF" />
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="btn btn-dark btn-sm btn-formatar" id="fc-cli-formatar">
+                  <i class="bi bi-magic" aria-hidden="true"></i>
+                  <span>FORMATAR</span>
+                </button>
+              </div>
+            </section>
+            <section class="card output-wrap" id="fc-cli-wrap" aria-live="polite">
+              <textarea id="fc-cli-out" class="output" readonly></textarea>
+              <div class="out-actions">
+                <button class="btn btn-sm" id="fc-cli-copiar">
+                  <i class="bi bi-clipboard" aria-hidden="true"></i>
+                  <span>COPIAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-chat-square-text" aria-hidden="true"></i>
+                  <span>BANNER DE COBRANÇA (ESFERA)</span>
+                </h2>
+                <div class="row g-2">
+                  <div class="col-12">
+                    <label for="fc-esfera-in">TEXTO DO ESFERA</label>
+                    <textarea id="fc-esfera-in" placeholder="COLE AQUI O TEXTO DO ESFERA"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="btn btn-dark btn-sm btn-formatar" id="fc-esfera-formatar">
+                  <i class="bi bi-magic" aria-hidden="true"></i>
+                  <span>FORMATAR</span>
+                </button>
+              </div>
+            </section>
+            <section class="card output-wrap" id="fc-esfera-wrap" aria-live="polite">
+              <textarea id="fc-esfera-out" class="output" readonly></textarea>
+              <div class="out-actions">
+                <button class="btn btn-sm" id="fc-esfera-copiar">
+                  <i class="bi bi-clipboard" aria-hidden="true"></i>
+                  <span>COPIAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-whatsapp" aria-hidden="true"></i>
+                  <span>TELEFONE + HISTÓRICO</span>
+                </h2>
+                <div class="row g-2">
+                  <div class="col-12 col-md-4">
+                    <label for="fc-tel">TELEFONE</label>
+                    <input id="fc-tel" class="guard-telefone" type="text" placeholder="DDD + NÚMERO" />
+                  </div>
+                  <div class="col-12">
+                    <label for="fc-hist">HISTÓRICO</label>
+                    <textarea id="fc-hist" placeholder="COLE OU DIGITE O HISTÓRICO"></textarea>
+                  </div>
+                </div>
+                <div class="actions justify-content-start">
+                  <button class="btn btn-sm" type="button" id="fc-ins-audio">
+                    <i class="bi bi-mic" aria-hidden="true"></i>
+                    <span>MENSAGEM DE ÁUDIO</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" id="fc-ins-nf">
+                    <i class="bi bi-receipt" aria-hidden="true"></i>
+                    <span>NOTA FISCAL</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" id="fc-ins-boleto">
+                    <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                    <span>BOLETO BANCÁRIO</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" id="fc-insert-chave-pix">
+                    <i class="bi bi-key" aria-hidden="true"></i>
+                    <span>CHAVE PIX</span>
+                  </button>
+                  <button class="btn btn-sm" type="button" id="fc-insert-cobranca-meta">
+                    <i class="bi bi-graph-up" aria-hidden="true"></i>
+                    <span>COBRANÇA META</span>
+                  </button>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="btn btn-dark btn-sm btn-formatar" id="fc-whats-formatar">
+                  <i class="bi bi-magic" aria-hidden="true"></i>
+                  <span>FORMATAR</span>
+                </button>
+              </div>
+            </section>
+            <section class="card output-wrap" id="fc-whats-wrap" aria-live="polite">
+              <textarea id="fc-whats-out" class="output" readonly></textarea>
+              <div class="out-actions">
+                <button class="btn btn-sm" id="fc-whats-copiar">
+                  <i class="bi bi-clipboard" aria-hidden="true"></i>
+                  <span>COPIAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Cadastro de Clientes -->
+      <section id="page-neg-cadastro" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12 col-lg-5 col-xl-4">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
+                  <span>CADASTRO DE CLIENTES</span>
+                </h2>
+
+                <div class="row g-2">
+                  <div class="col-12">
+                    <label for="cli-razao">RAZÃO SOCIAL</label>
+                    <input id="cli-razao" type="text" placeholder="EX.: EMPRESA EXEMPLO LTDA" />
+                  </div>
+
+                  <div class="col-12 col-sm-6">
+                    <label for="cli-codigo">CÓDIGO DO CLIENTE</label>
+                    <input id="cli-codigo" class="guard-codigo" type="text" inputmode="numeric" maxlength="6" placeholder="EX.: 123456" />
+                  </div>
+
+                  <div class="col-12 col-sm-6">
+                    <label for="cli-cnpj">CNPJ</label>
+                    <input id="cli-cnpj" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="cli-responsavel">NOME DO RESPONSÁVEL</label>
+                    <input id="cli-responsavel" type="text" placeholder="EX.: JOÃO DA SILVA" />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="cli-contato">NÚMERO DE CONTATO</label>
+                    <input id="cli-contato" class="guard-telefone" type="text" placeholder="EX.: (11) 98888-7777" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn btn-sm" id="cli-salvar">
+                  <i class="bi bi-save" aria-hidden="true"></i>
+                  <span>SALVAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-12 col-lg-7 col-xl-8">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="bi bi-list-ul" aria-hidden="true"></i>
+                    <span>CLIENTES CADASTRADOS</span>
+                  </span>
+                  <div class="d-flex gap-1">
+                    <button class="btn btn-sm" id="cli-exportar">
+                      <i class="bi bi-download" aria-hidden="true"></i>
+                      <span>EXPORTAR</span>
+                    </button>
+                    <button class="btn btn-sm" id="cli-importar">
+                      <i class="bi bi-upload" aria-hidden="true"></i>
+                      <span>IMPORTAR</span>
+                    </button>
+                    <input id="cli-import-file" type="file" accept="application/json" style="display:none" />
+                  </div>
+                </h2>
+
+                <div class="table-responsive neg-table-wrap">
+                  <table class="table table-sm mb-0 neg-table">
+                    <thead>
+                      <tr>
+                        <th>CLIENTE</th>
+                        <th>CÓD.</th>
+                        <th>CNPJ</th>
+                        <th>RESPONSÁVEL</th>
+                        <th>CONTATO</th>
+                        <th style="width:1%">AÇÕES</th>
+                      </tr>
+                    </thead>
+                    <tbody id="cli-tbody">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Cadastro de Negociações -->
+      <section id="page-neg-cad-negociacoes" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12 col-xl-4">
+            <section class="card p-2 p-sm-3 h-100 neg-client-panel">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-people" aria-hidden="true"></i>
+                  <span>CLIENTE</span>
+                </h2>
+                <div class="row g-2">
+                  <div class="col-12 col-sm-6">
+                    <label for="neg-busca-cnpj">CNPJ</label>
+                    <input id="neg-busca-cnpj" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <label for="neg-busca-codigo">CÓDIGO DO CLIENTE</label>
+                    <input id="neg-busca-codigo" class="guard-codigo" type="text" inputmode="numeric" maxlength="6" placeholder="EX.: 123456" />
+                  </div>
+                </div>
+                <div class="actions d-flex align-items-center justify-content-between">
+                  <div class="neg-no-identificar-toggle">
+                    <label class="form-check form-switch compact-switch mb-0" for="neg-no-identificar">
+                      <input class="form-check-input" type="checkbox" id="neg-no-identificar">
+                      <span class="form-check-label smallcaps">Não identificar</span>
+                    </label>
+                  </div>
+                  <button class="btn btn-sm" id="neg-buscar">
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                    <span>BUSCAR</span>
+                  </button>
+                </div>
+                <div id="neg-razao-wrapper" class="d-none">
+                  <label for="neg-razao-selecionada">RAZÃO SOCIAL</label>
+                  <input id="neg-razao-selecionada" type="text" disabled>
+                  <div class="mt-2 d-flex justify-content-end">
+                    <button class="btn btn-sm d-none" id="neg-buscar-outro" type="button">
+                      <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                      <span>BUSCAR OUTRO CLIENTE</span>
+                    </button>
+                  </div>
+                </div>
+                <div id="neg-cliente-info" class="neg-cliente-info" aria-live="polite"></div>
+                <div id="neg-cliente-selecionado" class="neg-cliente-selecionado d-none">
+                  <h3 class="neg-subtitle">CLIENTE SELECIONADO</h3>
+                  <div class="grid single">
+                    <div>
+                      <label for="neg-cli-razao">RAZÃO SOCIAL</label>
+                      <input id="neg-cli-razao" type="text" readonly disabled>
+                    </div>
+                    <div>
+                      <label for="neg-cli-cnpj">CNPJ</label>
+                      <input id="neg-cli-cnpj" type="text" readonly disabled>
+                    </div>
+                    <div>
+                      <label for="neg-cli-codigo">CÓDIGO DO CLIENTE</label>
+                      <input id="neg-cli-codigo" type="text" readonly disabled>
+                    </div>
+                    <div>
+                      <label for="neg-cli-responsavel">RESPONSÁVEL</label>
+                      <input id="neg-cli-responsavel" type="text" readonly disabled>
+                    </div>
+                    <div>
+                      <label for="neg-cli-contato">CONTATO</label>
+                      <input id="neg-cli-contato" type="text" readonly disabled>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-12 col-xl-8">
+            <section class="card p-2 p-sm-3 h-100 neg-neg-panel">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-journal-plus" aria-hidden="true"></i>
+                  <span>NEGOCIAÇÃO</span>
+                </h2>
+                <div class="row g-2">
+                  <div class="col-12 col-sm-4">
+                    <label for="neg-valor-devido">VALOR DEVIDO (R$)</label>
+                    <input id="neg-valor-devido" class="form-control" type="text" inputmode="decimal" placeholder="EX.: 10.000,00" />
+                  </div>
+                  <div class="col-12 col-sm-4">
+                    <label for="neg-multa">MULTA (R$)</label>
+                    <input id="neg-multa" class="form-control" type="text" inputmode="decimal" placeholder="EX.: 200,00" />
+                  </div>
+                  <div class="col-12 col-sm-4">
+                    <label for="neg-juros">JUROS (R$)</label>
+                    <input id="neg-juros" class="form-control" type="text" inputmode="decimal" placeholder="EX.: 600,00" />
+                  </div>
+                  <div class="col-12 col-sm-4">
+                    <label for="neg-num-parcelas">NÚMERO DE PARCELAS</label>
+                    <input id="neg-num-parcelas" class="form-control" type="number" min="1" step="1" placeholder="EX.: 6" />
+                  </div>
+                  <div class="col-12 col-sm-4" id="neg-entrada-col">
+                    <div id="neg-entrada-wrapper" class="neg-field-wrapper d-none">
+                      <label for="neg-valor-entrada">VALOR DA ENTRADA (R$)</label>
+                      <input id="neg-valor-entrada" class="form-control" type="text" inputmode="decimal" placeholder="EX.: 2.000,00" disabled />
+                    </div>
+                    <div id="neg-entrada-toggle-wrapper" class="mt-2 d-flex justify-content-center">
+                      <label class="form-check form-switch compact-switch mb-0">
+                        <input id="neg-entrada-ativa" class="form-check-input" type="checkbox" aria-label="Ativar entrada" />
+                        <span class="form-check-label smallcaps">ENTRADA (R$)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-4" id="neg-boletos-col">
+                    <div id="neg-qtd-boletos-wrapper" class="neg-field-wrapper d-none">
+                      <label for="neg-qtd-boletos">QUANTIDADE DE BOLETOS</label>
+                      <input id="neg-qtd-boletos" class="form-control" type="number" min="1" step="1" placeholder="EX.: 3" />
+                    </div>
+                    <div id="neg-taxa-boleto-toggle-wrapper" class="mt-2 d-flex justify-content-center">
+                      <label class="form-check form-switch compact-switch mb-0">
+                        <input id="neg-taxa-boletos" class="form-check-input" type="checkbox" />
+                        <span class="form-check-label smallcaps">TAXA ADM. BOLETO</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="neg-periodicidade-title">PERIODICIDADE</div>
+                    <div class="d-flex gap-2 flex-wrap justify-content-center neg-periodicidade">
+                      <label class="form-check form-check-inline mb-0">
+                        <input class="form-check-input" type="radio" name="neg-periodicidade" value="semanal" checked />
+                        <span class="form-check-label">SEMANAL (7 DIAS)</span>
+                      </label>
+                      <label class="form-check form-check-inline mb-0">
+                        <input class="form-check-input" type="radio" name="neg-periodicidade" value="quinzenal" />
+                        <span class="form-check-label">QUINZENAL (15 DIAS)</span>
+                      </label>
+                      <label class="form-check form-check-inline mb-0">
+                        <input class="form-check-input" type="radio" name="neg-periodicidade" value="mensal" />
+                        <span class="form-check-label">MENSAL (30 DIAS)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-4">
+                    <label for="neg-primeiro-pagamento-display">DATA DO PRIMEIRO PAGAMENTO</label>
+                    <div class="date-row">
+                      <button class="btn icon" id="neg-prev-date" type="button" aria-label="DIA ANTERIOR">
+                        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                      </button>
+                      <input class="form-control date-field" id="neg-primeiro-pagamento-display" type="text" inputmode="numeric" placeholder="DD/MM/AAAA" autocomplete="off" />
+                      <button class="btn icon" id="neg-next-date" type="button" aria-label="PRÓXIMO DIA">
+                        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                    <input id="neg-primeiro-pagamento" type="date" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none" />
+                  </div>
+                  <div class="col-12 col-sm-4">
+                    <label for="neg-numero-negociacao">NÚMERO DA NEGOCIAÇÃO</label>
+                    <input id="neg-numero-negociacao" class="form-control" type="text" placeholder="EX.: 123456" />
+                  </div>
+                  <!-- Campo oculto para armazenar as datas geradas (necessário para validação e salvamento) -->
+                  <textarea id="neg-datas" style="display:none"></textarea>
+                  <div class="col-12 col-sm-4 d-flex align-items-end">
+                    <button class="btn btn-sm w-100" id="neg-gerar-datas">
+                      <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                      <span>GERAR NEGOCIAÇÃO</span>
+                    </button>
+                  </div>
+                  <div class="col-12">
+                    <label for="neg-compensacao-out">TEXTO DE NEGOCIAÇÃO (ESFERA)</label>
+                    <textarea id="neg-compensacao-out" readonly placeholder="A negociação gerada aparecerá aqui."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn btn-sm" id="neg-salvar">
+                  <i class="bi bi-save" aria-hidden="true"></i>
+                  <span>SALVAR NEGOCIAÇÃO</span>
+                </button>
+                <div class="neg-preexistente-toggle">
+                  <label class="form-check form-switch compact-switch mb-0" for="neg-preexistente">
+                    <input class="form-check-input" type="checkbox" id="neg-preexistente">
+                    <span class="form-check-label smallcaps">Negociação pré existente</span>
+                  </label>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Compensações -->
+      <section id="page-compensacoes" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <nav class="modebar mb-2" aria-label="MODO COMPENSAÇÃO">
+                  <button class="btn primary w-100 btn-sm" id="c-m-creditos"><i class="bi bi-journal-arrow-up"></i><span>CRÉDITOS</span></button>
+                  <button class="btn w-100 btn-sm" id="c-m-pos"><i class="bi bi-people"></i><span>PÓS-VENDAS</span></button>
+                  <button class="btn w-100 btn-sm" id="c-m-neg"><i class="bi bi-chat-dots"></i><span>NEGOCIAÇÃO</span></button>
+                </nav>
+
+                <div id="c-grid" class="grid cols-3 tight">
+                  <section class="panel-section" id="c-cardTitulos">
+                    <div class="d-flex justify-content-between align-items-center gap-2 mb-2 panel-head-with-switch">
+                      <h2 class="panel-title mb-0">
+                        <i class="bi bi-clipboard-check" aria-hidden="true"></i>
+                        <span>TÍTULOS</span>
+                      </h2>
+                      <label class="form-check form-switch compact-switch mb-0" for="c-chkNoParcial" title="Evita baixa parcial">
+                        <input id="c-chkNoParcial" class="form-check-input" type="checkbox" />
+                        <span class="form-check-label smallcaps">
+                          <span class="lbl-full">DESCONSIDERAR DIVERGÊNCIA</span>
+                          <span class="lbl-short">DESC. DIV.</span>
+                        </span>
+                      </label>
+                    </div>
+                    <textarea id="c-titulos" placeholder="EX.: 000155148-1    001    21/11/2025    05/12/2025    864,00"></textarea>
+                  </section>
+
+                  <section class="panel-section" id="c-cardCreditos">
+                    <div class="d-flex justify-content-between align-items-center gap-2 mb-2 panel-head-with-switch">
+                      <h2 class="panel-title mb-0">
+                        <i class="bi bi-wallet2" aria-hidden="true"></i>
+                        <span>CRÉDITOS</span>
+                      </h2>
+                      <label class="form-check form-switch compact-switch mb-0" for="c-chkSobraJuro" title="Trata crédito remanescente como encargo, quando houver.">
+                        <input id="c-chkSobraJuro" class="form-check-input" type="checkbox" />
+                        <span class="form-check-label smallcaps">
+                          <span class="lbl-full">DESCONSIDERAR DIVERGÊNCIA</span>
+                          <span class="lbl-short">DESC. DIV.</span>
+                        </span>
+                      </label>
+                    </div>
+                    <textarea id="c-creditos" placeholder="EX.: ADTO    002    01/10/2025    01/10/2025    864,00"></textarea>
+                  </section>
+
+                  <section class="panel-section" id="c-cardEncargos">
+                    <h2 class="panel-title">
+                      <i class="bi bi-percent" aria-hidden="true"></i>
+                      <span>ENCARGOS</span>
+                    </h2>
+                    <div class="row g-2">
+                      <div class="col-12 col-sm-6">
+                        <label for="c-multa" id="c-lblMulta">MULTA</label>
+                        <input id="c-multa" type="text" inputmode="decimal" placeholder="EX.: 25,00" />
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <label for="c-juros" id="c-lblJuros">JUROS</label>
+                        <input id="c-juros" type="text" inputmode="decimal" placeholder="EX.: 0,89" />
+                      </div>
+                      <div class="col-12 col-sm-6" id="c-wrapParcelas" style="display:none">
+                        <label for="c-parcelas">PARCELAS</label>
+                        <input id="c-parcelas" type="text" inputmode="numeric" placeholder="EX.: 3" />
+                      </div>
+                      <div class="col-12 col-sm-6" id="c-wrapTaxa">
+                        <label class="form-check form-switch compact-switch mb-0" title="Aplica taxa de boleto (R$ 5,00 por boleto)">
+                          <input id="c-chkTaxa" class="form-check-input" type="checkbox" />
+                          <span class="form-check-label smallcaps">TAXA BOLETO</span>
+                        </label>
+                      </div>
+                      <div class="col-12 col-sm-6" id="c-wrapQtd" style="display:none">
+                        <label for="c-qtdBoletos">QUANTIDADE DE BOLETOS</label>
+                        <input id="c-qtdBoletos" type="text" inputmode="numeric" placeholder="EX.: 3" />
+                      </div>
+                    </div>
+                  </section>
+                </div>
+
+                <div class="panel-section" id="c-cardNeg" style="display:none">
+                  <h2 class="panel-title">
+                    <i class="bi bi-people" aria-hidden="true"></i>
+                    <span>NEGOCIAÇÃO</span>
+                  </h2>
+                  <textarea id="c-negociacao" placeholder="FORMATO LIVRE: Nº PARCELA, VENCIMENTO, VALOR, DATA PAGTO (OU X)" style="min-height:110px"></textarea>
+                </div>
+
+                <div class="panel-section" id="c-cardParc" style="display:none">
+                  <h2 class="panel-title">
+                    <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                    <span>PARCELA PAGA</span>
+                  </h2>
+                  <div class="stack tight">
+                    <div>
+                      <label for="c-parcelaPaga">Nº PARCELA</label>
+                      <input id="c-parcelaPaga" type="text" inputmode="numeric" placeholder="EX.: 2" />
+                    </div>
+                    <div>
+                      <label for="c-dataPagtoBR">DATA DO PAGAMENTO</label>
+                      <div class="date-row">
+                        <button class="btn icon" id="c-prevDate" type="button" aria-label="DIA ANTERIOR">
+                          <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <input class="date-field" id="c-dataPagtoBR" type="text" inputmode="numeric" placeholder="DD/MM/AAAA" autocomplete="off" />
+                        <button class="btn icon" id="c-nextDate" type="button" aria-label="PRÓXIMO DIA">
+                          <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                      <input id="c-dataPagto" type="date" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none" />
+                      <small style="color:var(--muted)">FORMATO EXIBIDO: DD/MM/AAAA</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn primary btn-sm" id="c-calcular" title="Ctrl+Enter">
+                  <i class="bi bi-play-fill" aria-hidden="true"></i>
+                  <span>CALCULAR</span>
+                </button>
+                <button class="btn btn-sm" id="c-limpar" title="Esc">
+                  <i class="bi bi-x-circle" aria-hidden="true"></i>
+                  <span>LIMPAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-12" id="c-pane-saida">
+            <section class="card output-wrap h-100" id="c-wrapOut" aria-live="polite">
+              <pre id="c-out" class="output"></pre>
+              <div class="out-actions">
+                <button class="btn btn-sm" id="c-copiar">
+                  <i class="bi bi-clipboard" aria-hidden="true"></i>
+                  <span>COPIAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Página: Transferências -->
+      <section id="page-transferencias" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-arrow-down-up" aria-hidden="true"></i>
+                  <span>TRANSFERÊNCIAS</span>
+                </h2>
+                <div class="d-flex flex-column gap-2">
+                  <div class="tr-toolbar">
+                    <div class="tr-toolbar-left">
+                      <button class="btn btn-sm" id="tr-export-table-btn" type="button">
+                        <i class="bi bi-clipboard" aria-hidden="true"></i>
+                        <span>EXPORTAR TABELA</span>
+                      </button>
+                      <button class="btn btn-sm" id="tr-kpis-btn" type="button">
+                        <i class="bi bi-graph-up" aria-hidden="true"></i>
+                        <span>KPIs</span>
+                      </button>
+                    </div>
+                    <div class="tr-toolbar-right">
+                      <button class="btn primary btn-sm" id="tr-new-btn" type="button">
+                        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                        <span>NOVA TRANSFERÊNCIA</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div id="tr-form-wrap" class="d-none">
+                    <div class="row g-2 g-md-3">
+                      <div class="col-12">
+                        <section class="card p-2 p-sm-3 h-100 pix-client-panel neg-client-panel">
+                          <div class="panel-section">
+                            <h2 class="panel-title">
+                              <i class="bi bi-people" aria-hidden="true"></i>
+                              <span>NOVA TRANSFERÊNCIA</span>
+                            </h2>
+                            <div class="row g-2">
+                              <div class="col-12 col-sm-6">
+                                <label for="pix-inline-cnpj">CNPJ</label>
+                                <input id="pix-inline-cnpj" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="pix-inline-codigo">CÓDIGO DO CLIENTE</label>
+                                <input id="pix-inline-codigo" class="guard-codigo" type="text" inputmode="numeric" maxlength="6" placeholder="EX.: 123456" />
+                              </div>
+                            </div>
+                            <div class="actions d-flex align-items-center justify-content-between">
+                              <div class="neg-no-identificar-toggle">
+                                <label class="form-check form-switch compact-switch mb-0" for="pix-no-identificar">
+                                  <input class="form-check-input" type="checkbox" id="pix-no-identificar">
+                                  <span class="form-check-label smallcaps">Não identificar</span>
+                                </label>
+                              </div>
+                              <button class="btn btn-sm" id="pix-cli-buscar" type="button">
+                                <i class="bi bi-search" aria-hidden="true"></i>
+                                <span>BUSCAR</span>
+                              </button>
+                            </div>
+                            <div id="pix-razao-wrapper" class="d-none">
+                              <label for="pix-razao-selecionada">RAZÃO SOCIAL</label>
+                              <input id="pix-razao-selecionada" type="text" disabled>
+                              <div class="mt-2 d-flex justify-content-end">
+                                <button class="btn btn-sm d-none" id="pix-buscar-outro" type="button">
+                                  <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                                  <span>BUSCAR OUTRO CLIENTE</span>
+                                </button>
+                              </div>
+                            </div>
+                            <div id="pix-cliente-info" class="neg-cliente-info d-none" aria-live="polite"></div>
+                            <div id="pix-cliente-selecionado" class="neg-cliente-selecionado d-none">
+                              <h3 class="neg-subtitle">CLIENTE SELECIONADO</h3>
+                              <div class="grid single">
+                                <div>
+                                  <label for="pix-cli-razao">RAZÃO SOCIAL</label>
+                                  <input id="pix-cli-razao" type="text" readonly disabled>
+                                </div>
+                                <div>
+                                  <label for="pix-cli-cnpj">CNPJ</label>
+                                  <input id="pix-cli-cnpj" type="text" readonly disabled>
+                                </div>
+                                <div>
+                                  <label for="pix-cli-codigo">CÓDIGO DO CLIENTE</label>
+                                  <input id="pix-cli-codigo" type="text" readonly disabled>
+                                </div>
+                                <div>
+                                  <label for="pix-cli-responsavel">RESPONSÁVEL</label>
+                                  <input id="pix-cli-responsavel" type="text" readonly disabled>
+                                </div>
+                                <div>
+                                  <label for="pix-cli-contato">CONTATO</label>
+                                  <input id="pix-cli-contato" type="text" readonly disabled>
+                                </div>
+                              </div>
+                            </div>
+                            <input id="tr-codigo" type="hidden" />
+                            <input id="tr-cnpj" type="hidden" />
+                            <div class="row g-2 align-items-end mt-2">
+                              <div class="col-12 col-md-8 col-lg-9">
+                                <label for="tr-valor">VALOR</label>
+                                <input id="tr-valor" type="text" inputmode="numeric" placeholder="R$ 0,00" />
+                              </div>
+                              <div class="col-12 col-md-4 col-lg-3 d-grid">
+                                <button class="btn primary btn-sm w-100" id="tr-add" type="button">
+                                  <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                                  <span>ADICIONAR</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-section">
+                <div class="table-responsive tr-table-wrap">
+                  <table class="table table-sm mb-0 tr-table">
+                    <thead>
+                      <tr>
+                        <th>CÓD.</th>
+                        <th>CNPJ</th>
+                        <th>VALOR</th>
+                        <th class="text-center">PROGRESSO</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tr-body">
+                      <tr>
+                        <td colspan="4" class="text-center text-muted">Nenhuma transferência cadastrada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Notificação Extrajudicial -->
+      <section id="page-notificacao-extrajudicial" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row justify-content-center">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                  <span>NOTIFICAÇÃO EXTRAJUDICIAL</span>
+                </h2>
+                <div class="rep-toggle m-0 ne-toggle">
+                  <span class="rep-toggle-label">NDS</span>
+                  <div class="form-check form-switch compact-switch mb-0">
+                    <input id="ne-esfera" class="form-check-input" type="checkbox" aria-label="Selecionar NDS ou PRATI">
+                    <label class="form-check-label visually-hidden" for="ne-esfera">NDS / PRATI</label>
+                  </div>
+                  <span class="rep-toggle-label">PRATI</span>
+                </div>
+                <div class="row g-2">
+                  <div class="col-12">
+                    <label for="ne-razao">RAZÃO SOCIAL</label>
+                    <input id="ne-razao" type="text" placeholder="RAZÃO SOCIAL" />
+                  </div>
+                  <div class="col-12">
+                    <label for="ne-cnpj">CNPJ</label>
+                    <input id="ne-cnpj" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                  </div>
+                  <div class="col-12">
+                    <label for="ne-data">DATA (OPCIONAL)</label>
+                    <input id="ne-data" class="guard-date-br" type="text" inputmode="numeric" maxlength="10" placeholder="DD/MM/AAAA" />
+                  </div>
+                  <div class="col-12">
+                    <label for="ne-titulos">TÍTULOS</label>
+                    <textarea id="ne-titulos" rows="6" placeholder="EX.: 000155148-1    001    21/11/2025    05/12/2025    864,00"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="btn primary btn-sm" id="ne-gerar" type="button">
+                  <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                  <span>GERAR CARTA</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- Pagina: ALFA -->
+      <section id="page-alfa" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-chat-left-dots" aria-hidden="true"></i>
+                  <span>ALFA</span>
+                </h2>
+                <div class="row g-2">
+                  <div class="col-12 col-lg-6">
+                    <label for="alfa-operador">OPERADOR EM USO</label>
+                    <select id="alfa-operador" class="form-select form-select-sm" aria-label="Operador em uso">
+                      <option value="Carlyle|(45) 99958-0258">Carlyle - (45) 99958-0258</option>
+                      <option value="Lucia|(45) 99113-7325">Lucia - (45) 99113-7325</option>
+                      <option value="Pedro|(45) 99905-3383">Pedro - (45) 99905-3383</option>
+                      <option value="Rafael|(45) 99903-1265">Rafael - (45) 99903-1265</option>
+                      <option value="Renan|(45) 99903-1652">Renan - (45) 99903-1652</option>
+                      <option value="Vanderleia|(45) 99114-2947">Vanderleia - (45) 99114-2947</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <label for="alfa-cnpj">CNPJ DO CLIENTE</label>
+                    <input id="alfa-cnpj" class="guard-cnpj" type="text" inputmode="numeric" maxlength="14" placeholder="00000000000000" />
+                  </div>
+                  <div class="col-12">
+                    <label for="alfa-esfera">TEXTO DO ESFERA</label>
+                    <textarea id="alfa-esfera" rows="10" placeholder="COLE O TEXTO DO ESFERA PARA GERAR A MENSAGEM"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="btn primary btn-sm" id="alfa-msg-fria" type="button">
+                  <i class="bi bi-chat-left-text" aria-hidden="true"></i>
+                  <span>MENSAGEM FRIA</span>
+                </button>
+                <button class="btn btn-sm" id="alfa-msg-previsao-serasa" type="button">
+                  <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                  <span>PREVISÃO + AVISO SERASA</span>
+                </button>
+                <button class="btn btn-sm" id="alfa-msg-risco-bloqueio" type="button">
+                  <i class="bi bi-shield-exclamation" aria-hidden="true"></i>
+                  <span>RISCO DE BLOQUEIO DE CRÉDITO</span>
+                </button>
+                <button class="btn btn-sm" id="alfa-msg-regularizacao-urgente" type="button">
+                  <i class="bi bi-alarm" aria-hidden="true"></i>
+                  <span>REGULARIZAÇÃO URGENTE</span>
+                </button>
+                <button class="btn btn-sm" id="alfa-msg-notificacao-cobranca" type="button">
+                  <i class="bi bi-megaphone" aria-hidden="true"></i>
+                  <span>CARTA DE COBRANÇA</span>
+                </button>
+                <button class="btn btn-sm" id="alfa-limpar" type="button">
+                  <i class="bi bi-eraser" aria-hidden="true"></i>
+                  <span>LIMPAR</span>
+                </button>
+              </div>
+            </section>
+            <section class="card output-wrap" id="alfa-wrap" aria-live="polite">
+              <textarea id="alfa-out" class="output" readonly></textarea>
+              <div class="out-actions">
+                <button class="btn btn-sm" id="alfa-copiar" type="button">
+                  <i class="bi bi-clipboard" aria-hidden="true"></i>
+                  <span>COPIAR</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Página: Import/Export -->
+      <section id="page-import-export" class="page">
+        <div class="row g-2 g-md-3 compact-layout align-items-start stretch-row">
+          <div class="col-12 col-xl-6">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-upload" aria-hidden="true"></i>
+                  <span>EXPORTAR DADOS</span>
+                </h2>
+                <p class="text-muted small mb-2">Gera um arquivo único (JSON) com clientes, negociações, transferências PIX e estados de checkboxes/sliders.</p>
+                <button class="btn primary btn-sm w-100" id="imp-exp-exportar">
+                  <i class="bi bi-download" aria-hidden="true"></i>
+                  <span>EXPORTAR ARQUIVO</span>
+                </button>
+              </div>
+            </section>
+          </div>
+          <div class="col-12 col-xl-6">
+            <section class="card p-2 p-sm-3 h-100">
+              <div class="panel-section">
+                <h2 class="panel-title">
+                  <i class="bi bi-download" aria-hidden="true"></i>
+                  <span>IMPORTAR DADOS</span>
+                </h2>
+                <p class="text-muted small mb-2">Substitui os dados locais pelos do arquivo exportado (inclusive comprovantes PIX).</p>
+                <input id="imp-exp-importar" type="file" accept="application/json" class="form-control form-control-sm mb-2" />
+                <button class="btn btn-sm w-100" id="imp-exp-importar-btn">
+                  <i class="bi bi-box-arrow-in-down" aria-hidden="true"></i>
+                  <span>IMPORTAR ARQUIVO</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal de Transferência -->
+  <div id="tr-modal" class="neg-modal" role="dialog" aria-modal="true" aria-labelledby="tr-modal-title">
+    <div class="neg-modal-content">
+      <div class="neg-modal-header">
+        <div>
+          <div class="neg-modal-eyebrow">DETALHES DA TRANSFERÊNCIA</div>
+          <h3 id="tr-modal-title" class="neg-modal-title"></h3>
+        </div>
+        <button class="btn icon" id="tr-modal-close" type="button" aria-label="Fechar">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="tr-modal-body" class="neg-modal-body">
+        <div class="neg-modal-section" id="tr-modal-info"></div>
+        <div class="neg-modal-section">
+          <h4>STATUS</h4>
+          <div class="tr-status-grid">
+            <label class="form-check form-switch compact-switch mb-0">
+              <input class="form-check-input" type="checkbox" id="tr-status-email">
+              <span class="form-check-label smallcaps">E-MAIL</span>
+            </label>
+            <label class="form-check form-switch compact-switch mb-0">
+              <input class="form-check-input" type="checkbox" id="tr-status-creditado">
+              <span class="form-check-label smallcaps">CREDITADO</span>
+            </label>
+            <label class="form-check form-switch compact-switch mb-0">
+              <input class="form-check-input" type="checkbox" id="tr-status-compensacao">
+              <span class="form-check-label smallcaps">COMPENSAÇÃO</span>
+            </label>
+            <label class="form-check form-switch compact-switch mb-0">
+              <input class="form-check-input" type="checkbox" id="tr-status-finalizado">
+              <span class="form-check-label smallcaps">FINALIZADO</span>
+            </label>
+          </div>
+        </div>
+        <div class="neg-modal-section d-flex flex-column gap-2">
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-sm" id="tr-save-proof-btn" type="button">
+              <i class="bi bi-save" aria-hidden="true"></i>
+              <span>SALVAR COMPROVANTE</span>
+            </button>
+            <button class="btn btn-sm" id="tr-modal-email" type="button">
+              <i class="bi bi-envelope" aria-hidden="true"></i>
+              <span>TEXTO E-MAIL</span>
+            </button>
+            <button class="btn btn-sm" id="tr-modal-esfera" type="button">
+              <i class="bi bi-chat-square-text" aria-hidden="true"></i>
+              <span>TEXTO ESFERA</span>
+            </button>
+            <button class="btn btn-sm btn-dark" id="tr-modal-compensar" type="button">
+              <i class="bi bi-cash-coin" aria-hidden="true"></i>
+              <span>IR PARA COMPENSAÇÕES</span>
+            </button>
+            <button class="btn btn-sm" id="tr-modal-delete" type="button">
+              <i class="bi bi-trash" aria-hidden="true"></i>
+              <span>EXCLUIR TRANSFERÊNCIA</span>
+            </button>
+          </div>
+          <div id="tr-proof-wrap" class="d-none">
+            <div id="tr-paste-zone" class="tr-paste-zone" tabindex="0">Cole uma imagem ou PDF aqui (Ctrl+V)</div>
+            <div id="tr-paste-preview" class="tr-paste-preview d-none">
+              <img id="tr-paste-img" alt="Pré-visualização" />
+              <button class="btn btn-sm w-100 mt-2" id="tr-download-img" type="button">
+                <i class="bi bi-download" aria-hidden="true"></i>
+                <span>BAIXAR ARQUIVO</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de detalhes da negociação -->
+  <div id="neg-modal" class="neg-modal" role="dialog" aria-modal="true" aria-labelledby="neg-modal-title">
+    <div class="neg-modal-content">
+      <div class="neg-modal-header">
+        <div>
+          <div class="neg-modal-eyebrow">DETALHES DA NEGOCIAÇÃO</div>
+          <h3 id="neg-modal-title" class="neg-modal-title"></h3>
+        </div>
+        <button class="btn icon" id="neg-modal-close" type="button" aria-label="Fechar">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="neg-modal-body" class="neg-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Modal de KPIs de Transferências -->
+  <div id="tr-kpi-modal" class="neg-modal" role="dialog" aria-modal="true" aria-labelledby="tr-kpi-title">
+    <div class="neg-modal-content">
+      <div class="neg-modal-header">
+        <div>
+          <div class="neg-modal-eyebrow">RELATÓRIO</div>
+          <h3 id="tr-kpi-title" class="neg-modal-title">KPIs – Transferências</h3>
+        </div>
+        <button class="btn icon" id="tr-kpi-close" type="button" aria-label="Fechar">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="tr-kpi-content" class="neg-modal-body"></div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="script.js?v=1.0.10"></script>
+</body>
+</html>

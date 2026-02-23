@@ -15,12 +15,23 @@ export function FarmaFeature() {
     );
   }
 
+  const pathname = window.location.pathname || '/';
+  const base = pathname.endsWith('/') ? pathname : `${pathname}/`;
+  const iframeSrc = `${base}farma-cobtool/index.html?page=${encodeURIComponent(selected.cobtoolPage)}`;
+
   return (
-    <section className="card">
-      <h1>{selected.title}</h1>
-      <p>Pagina inicial da funcionalidade {selected.title}.</p>
-      <p>Aqui vamos evoluir as regras e automacoes especificas do modulo.</p>
-      <Link to="/farma">Voltar para FARMA</Link>
+    <section className="farma-module">
+      <div className="card">
+        <h1>{selected.title}</h1>
+        <p>Modulo legado migrado do Cobtool para o MSCGA.</p>
+        <div className="farma-module-actions">
+          <Link to="/farma">Voltar para FARMA</Link>
+          <a href={iframeSrc} target="_blank" rel="noreferrer">
+            Abrir em nova aba
+          </a>
+        </div>
+      </div>
+      <iframe className="farma-module-frame" key={selected.slug} src={iframeSrc} title={`Modulo ${selected.title}`} />
     </section>
   );
 }

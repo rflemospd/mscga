@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 export type FarmaFeature = {
   slug: string;
+  cobtoolPage: string;
   title: string;
   description: string;
 };
@@ -9,31 +10,37 @@ export type FarmaFeature = {
 export const farmaFeatures: FarmaFeature[] = [
   {
     slug: 'negociacoes',
+    cobtoolPage: 'negociacoes',
     title: 'NEGOCIACOES',
     description: 'Fluxo para controle de propostas e acordos com clientes.',
   },
   {
     slug: 'compensacoes',
+    cobtoolPage: 'compensacoes',
     title: 'COMPENSACOES',
     description: 'Conferencia e acompanhamento de compensacoes financeiras.',
   },
   {
     slug: 'transferencias',
+    cobtoolPage: 'transferencias',
     title: 'TRANSFERENCIAS',
     description: 'Gestao de transferencias e validacao operacional.',
   },
   {
     slug: 'cadastro-clientes',
+    cobtoolPage: 'neg-cadastro',
     title: 'CADASTRO DE CLIENTES',
     description: 'Cadastro e atualizacao de dados de clientes.',
   },
   {
     slug: 'notificacao-extrajudicial',
+    cobtoolPage: 'notificacao-extrajudicial',
     title: 'NOTIFICACAO EXTRAJUDICIAL',
     description: 'Emissao e acompanhamento de notificacoes extrajudiciais.',
   },
   {
     slug: 'alfa',
+    cobtoolPage: 'alfa',
     title: 'ALFA',
     description: 'Operacoes e rotinas especificas do modulo ALFA.',
   },
