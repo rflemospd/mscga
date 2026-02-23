@@ -1,12 +1,27 @@
 import { Link, useParams } from 'react-router-dom';
-import { farmaFeatures } from './Farma';
-import { useEffect } from 'react';
+import { AlfaPage } from './farma/AlfaPage';
+import { CadastroClientesPage } from './farma/CadastroClientesPage';
+import { CompensacoesPage } from './farma/CompensacoesPage';
+import { NegociacoesPage } from './farma/NegociacoesPage';
+import { NotificacaoExtrajudicialPage } from './farma/NotificacaoExtrajudicialPage';
+import { TransferenciasPage } from './farma/TransferenciasPage';
+import type { FarmaFeatureSlug } from './farma/types';
+
+const components: Record<FarmaFeatureSlug, () => JSX.Element> = {
+  negociacoes: NegociacoesPage,
+  compensacoes: CompensacoesPage,
+  transferencias: TransferenciasPage,
+  'cadastro-clientes': CadastroClientesPage,
+  'notificacao-extrajudicial': NotificacaoExtrajudicialPage,
+  alfa: AlfaPage,
+};
 
 export function FarmaFeature() {
   const { feature } = useParams();
-  const selected = farmaFeatures.find((item) => item.slug === feature);
+  const key = feature as FarmaFeatureSlug | undefined;
+  const FeatureComponent = key ? components[key] : undefined;
 
-  if (!selected) {
+  if (!FeatureComponent) {
     return (
       <section className="card">
         <h1>Funcionalidade nao encontrada</h1>
@@ -16,23 +31,5 @@ export function FarmaFeature() {
     );
   }
 
-  const pathname = window.location.pathname || '/';
-  const base = pathname.endsWith('/') ? pathname : `${pathname}/`;
-  const toolUrl = `${base}farma-cobtool/index.html?page=${encodeURIComponent(selected.cobtoolPage)}`;
-
-  useEffect(() => {
-    window.location.assign(toolUrl);
-  }, [toolUrl]);
-
-  return (
-    <section className="card">
-      <h1>{selected.title}</h1>
-      <p>Abrindo funcionalidade...</p>
-      <p>
-        Se o redirecionamento nao acontecer automaticamente, clique em{' '}
-        <a href={toolUrl}>abrir modulo</a>.
-      </p>
-      <Link to="/farma">Voltar para FARMA</Link>
-    </section>
-  );
+  return <FeatureComponent />;
 }

@@ -85,6 +85,101 @@ main {
   background: #1d4ed8;
 }
 
+.farma-form h2,
+.farma-list h2 {
+  margin-top: 0;
+}
+
+.farma-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.farma-span-2 {
+  grid-column: 1 / -1;
+}
+
+.farma-form textarea {
+  min-height: 120px;
+}
+
+.farma-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.farma-actions button,
+.farma-inline-actions button {
+  width: auto;
+  margin-top: 0;
+}
+
+.farma-inline-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.farma-form select,
+.farma-list select {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #9ca3af;
+}
+
+.farma-btn-secondary {
+  background: #4b5563;
+}
+
+.farma-btn-danger {
+  background: #b91c1c;
+}
+
+.farma-list-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.farma-table-wrap {
+  overflow: auto;
+}
+
+.farma-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.farma-table th,
+.farma-table td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.55rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.farma-error {
+  color: #b91c1c;
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .farma-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .farma-span-2 {
+    grid-column: auto;
+  }
+}
+
 
 .login-card {
   max-width: 420px;
