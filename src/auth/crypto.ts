@@ -1,6 +1,6 @@
 export type UserRecord = {
   username: string;
-  role: 'viewer' | 'ops' | 'admin';
+  role: 'grandes_contas' | 'farma' | 'admin';
   salt: string;
   iterations: number;
   hash: string;

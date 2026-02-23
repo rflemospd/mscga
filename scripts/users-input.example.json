@@ -1,5 +1,5 @@
 [
-  { "username": "viewer1", "role": "viewer", "password": "trocar-imediatamente" },
-  { "username": "ops1", "role": "ops", "password": "trocar-imediatamente" },
-  { "username": "admin1", "role": "admin", "password": "trocar-imediatamente" }
+  { "username": "grandes_contas1", "role": "grandes_contas", "password": "trocar-imediatamente" },
+  { "username": "farma1", "role": "farma", "password": "trocar-imediatamente" },
+  { "username": "admin", "role": "admin", "password": "trocar-imediatamente" }
 ]

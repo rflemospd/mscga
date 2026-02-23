@@ -2,7 +2,7 @@ import { pbkdf2Sync, randomBytes } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-type Role = 'viewer' | 'ops' | 'admin';
+type Role = 'grandes_contas' | 'farma' | 'admin';
 
 type InputUser = {
   username: string;

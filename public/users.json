@@ -1,7 +1,7 @@
 [
   {
     "username": "viewer1",
-    "role": "viewer",
+    "role": "grandes_contas",
     "salt": "sTHEVDXdx6Ry6rssLTgpFQ==",
     "iterations": 310000,
     "hash": "200j6HWpLKZt9FgRPHexTkdQPrqMwBtGTI9k6Y882Ho=",
@@ -10,7 +10,7 @@
   },
   {
     "username": "ops1",
-    "role": "ops",
+    "role": "farma",
     "salt": "0Jay1uoVYQj+xoJNQirOxQ==",
     "iterations": 310000,
     "hash": "P2E9xW/UyjvIetGj2ZP07xuG7G7ld6i79g9me94NDxs=",
@@ -28,7 +28,7 @@
   },
   {
     "username": "rafael.lemos",
-    "role": "admin",
+    "role": "farma",
     "salt": "bH4TvMLuNwvBgB1H1j7b0w==",
     "iterations": 310000,
     "hash": "Z1/jQOSm9IELns2sYXov0Cdaojtw7O5tjlad77suAjg=",

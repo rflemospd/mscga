@@ -4,7 +4,7 @@ import { cardPermissions } from '../auth/permissions';
 const cards: Record<string, { title: string; body: string }> = {
   status: { title: 'Status', body: 'Visão geral de disponibilidade e saúde dos serviços.' },
   news: { title: 'Comunicados', body: 'Notícias internas e mudanças recentes.' },
-  operations: { title: 'Operações', body: 'Checklist operacional diário para time de ops.' },
+  operations: { title: 'Operações', body: 'Checklist operacional diário para time de farma.' },
   adminGuide: { title: 'Administração', body: 'Procedimentos de revisão de usuários e papéis.' },
 };
 

@@ -20,11 +20,11 @@ Medidas implementadas para elevar o nível mínimo:
 
 - Login em `/#/login` com mensagens genéricas (`Credenciais inválidas`).
 - Usuários pré-definidos apenas pelo usuário mestre (fora da UI).
-- Perfis: `viewer`, `ops`, `admin`.
+- Perfis: `grandes_contas`, `farma`, `admin`.
 - Rotas protegidas com guardas:
   - `/#/home` (todos autenticados)
   - `/#/info` (todos autenticados)
-  - `/#/restricted` (ops/admin)
+  - `/#/restricted` (farma/admin)
   - `/#/admin` (admin)
   - `/#/denied` para acesso sem permissão
 - Header com usuário logado, role, último login, expira em X minutos e logout.
@@ -41,8 +41,8 @@ cp scripts/users-input.example.json scripts/users-input.json
 
 ```json
 [
-  { "username": "usuario1", "role": "viewer", "password": "senha-forte" },
-  { "username": "usuario2", "role": "ops", "password": "senha-forte" },
+  { "username": "usuario1", "role": "grandes_contas", "password": "senha-forte" },
+  { "username": "usuario2", "role": "farma", "password": "senha-forte" },
   { "username": "usuario3", "role": "admin", "password": "senha-forte" }
 ]
 ```
@@ -91,7 +91,7 @@ Workflow em `.github/workflows/deploy.yml`:
 
 ## Credenciais de exemplo fracas (somente demo)
 
-O repositório inclui `public/users.json` gerado com senhas fracas (`viewer123`, `ops123`, `admin123`) apenas para demonstração.
+O repositório inclui `public/users.json` gerado com senhas fracas (`grandes_contas123`, `farma123`, `admin123`) apenas para demonstração.
 **Troque imediatamente** em qualquer uso real.
 
 ## Estrutura

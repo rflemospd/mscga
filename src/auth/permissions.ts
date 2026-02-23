@@ -1,21 +1,21 @@
-export type Role = 'viewer' | 'ops' | 'admin';
+export type Role = 'grandes_contas' | 'farma' | 'admin';
 
 const roleRank: Record<Role, number> = {
-  viewer: 1,
-  ops: 2,
+  grandes_contas: 1,
+  farma: 2,
   admin: 3,
 };
 
 export const routeRequirements: Record<string, Role> = {
-  '/home': 'viewer',
-  '/info': 'viewer',
-  '/restricted': 'ops',
+  '/home': 'grandes_contas',
+  '/info': 'grandes_contas',
+  '/restricted': 'farma',
   '/admin': 'admin',
 };
 
 export const cardPermissions: Record<Role, string[]> = {
-  viewer: ['status', 'news'],
-  ops: ['status', 'news', 'operations'],
+  grandes_contas: ['status', 'news'],
+  farma: ['status', 'news', 'operations'],
   admin: ['status', 'news', 'operations', 'adminGuide'],
 };
 

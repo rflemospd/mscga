@@ -46,7 +46,7 @@ export default function App() {
           <Route element={<RouteGuard />}>
             <Route path="/home" element={<Home />} />
             <Route path="/info" element={<Info />} />
-            <Route path="/restricted" element={<RouteGuard requiredRole="ops" element={<Restricted />} />} />
+            <Route path="/restricted" element={<RouteGuard requiredRole="farma" element={<Restricted />} />} />
             <Route path="/admin" element={<RouteGuard requiredRole="admin" element={<Admin />} />} />
             <Route path="/denied" element={<Denied />} />
           </Route>
