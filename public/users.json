@@ -25,5 +25,14 @@
     "hash": "F8/mF6Q8hJyXBxFF19Jm5NF5UD44AZCGsJag2zHp6tc=",
     "hashAlg": "SHA-256",
     "dkLen": 32
+  },
+  {
+    "username": "rafael.lemos",
+    "role": "admin",
+    "salt": "bH4TvMLuNwvBgB1H1j7b0w==",
+    "iterations": 310000,
+    "hash": "Z1/jQOSm9IELns2sYXov0Cdaojtw7O5tjlad77suAjg=",
+    "hashAlg": "SHA-256",
+    "dkLen": 32
   }
 ]
