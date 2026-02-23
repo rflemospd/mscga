@@ -9,6 +9,7 @@ const roleRank: Record<Role, number> = {
 export const routeRequirements: Record<string, Role> = {
   '/home': 'grandes_contas',
   '/info': 'grandes_contas',
+  '/farma': 'farma',
   '/restricted': 'farma',
   '/admin': 'admin',
 };

@@ -4,11 +4,12 @@ import { RouteGuard } from './auth/guards';
 import { hasAccessToRoute } from './auth/permissions';
 import { Admin } from './pages/Admin';
 import { Denied } from './pages/Denied';
+import { Farma } from './pages/Farma';
+import { FarmaFeature } from './pages/FarmaFeature';
 import { Home } from './pages/Home';
 import { Info } from './pages/Info';
 import { Login } from './pages/Login';
 import { NotFound } from './pages/NotFound';
-import { Restricted } from './pages/Restricted';
 
 function Header() {
   const session = useSession();
@@ -21,7 +22,7 @@ function Header() {
       <nav>
         <Link to="/home">Home</Link>
         <Link to="/info">Info</Link>
-        {hasAccessToRoute(session.role, '/restricted') && <Link to="/restricted">Restricted</Link>}
+        {hasAccessToRoute(session.role, '/farma') && <Link to="/farma">Farma</Link>}
         {hasAccessToRoute(session.role, '/admin') && <Link to="/admin">Admin</Link>}
       </nav>
       <div className="session-info">
@@ -46,7 +47,9 @@ export default function App() {
           <Route element={<RouteGuard />}>
             <Route path="/home" element={<Home />} />
             <Route path="/info" element={<Info />} />
-            <Route path="/restricted" element={<RouteGuard requiredRole="farma" element={<Restricted />} />} />
+            <Route path="/farma" element={<RouteGuard requiredRole="farma" element={<Farma />} />} />
+            <Route path="/farma/:feature" element={<RouteGuard requiredRole="farma" element={<FarmaFeature />} />} />
+            <Route path="/restricted" element={<Navigate to="/farma" replace />} />
             <Route path="/admin" element={<RouteGuard requiredRole="admin" element={<Admin />} />} />
             <Route path="/denied" element={<Denied />} />
           </Route>
