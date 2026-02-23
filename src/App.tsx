@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { logout, touchSession, useSession } from './auth/auth';
+import { logout, useSession } from './auth/auth';
 import { RouteGuard } from './auth/guards';
 import { hasAccessToRoute } from './auth/permissions';
 import { Admin } from './pages/Admin';
@@ -17,8 +16,6 @@ function Header() {
 
   if (!session || location.pathname === '/login') return null;
 
-  const expiresInMinutes = Math.max(0, Math.ceil((session.expiresAt - Date.now()) / 60000));
-
   return (
     <header className="topbar">
       <nav>
@@ -32,7 +29,6 @@ function Header() {
           {session.username} ({session.role})
         </span>
         <span>Último login: {new Date(session.loginAt).toLocaleString('pt-BR')}</span>
-        <span>Expira em: {expiresInMinutes} min</span>
         <button onClick={logout}>Sair</button>
       </div>
     </header>
@@ -40,12 +36,8 @@ function Header() {
 }
 
 export default function App() {
-  useEffect(() => {
-    touchSession();
-  }, []);
-
   return (
-    <div className="app-shell" onClick={touchSession} onKeyDown={touchSession}>
+    <div className="app-shell">
       <Header />
       <main>
         <Routes>
