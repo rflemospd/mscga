@@ -1,7 +1,7 @@
 import { FormEvent, useMemo, useState } from 'react';
-import { loadClients, saveClients } from './storage';
+import { exportFarmaBackup, importFarmaBackup, loadClients, saveClients } from './storage';
 import type { FarmaClient } from './types';
-import { createId, formatCnpj, onlyDigits } from './utils';
+import { createId, downloadBlob, maskCnpjValue, normalizeCnpj, normalizeCodigo } from './utils';
 
 type ClientForm = {
   id: string;
@@ -9,6 +9,7 @@ type ClientForm = {
   razao: string;
   cnpj: string;
   representante: string;
+  contato: string;
   email: string;
 };
 
@@ -18,6 +19,7 @@ const emptyForm: ClientForm = {
   razao: '',
   cnpj: '',
   representante: '',
+  contato: '',
   email: '',
 };
 
@@ -25,6 +27,7 @@ export function CadastroClientesPage() {
   const [clients, setClients] = useState<FarmaClient[]>(() => loadClients());
   const [form, setForm] = useState<ClientForm>(emptyForm);
   const [search, setSearch] = useState('');
+  const [message, setMessage] = useState('');
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -34,6 +37,7 @@ export function CadastroClientesPage() {
         item.codigo.includes(term) ||
         item.razao.toLowerCase().includes(term) ||
         item.representante.toLowerCase().includes(term) ||
+        item.contato.toLowerCase().includes(term) ||
         item.email.toLowerCase().includes(term) ||
         item.cnpj.includes(term)
       );
@@ -44,8 +48,26 @@ export function CadastroClientesPage() {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const codigo = onlyDigits(form.codigo).slice(0, 6).padStart(6, '0');
-    if (!codigo || !form.razao.trim()) return;
+    const codigo = normalizeCodigo(form.codigo);
+    const cnpj = normalizeCnpj(form.cnpj);
+    const razao = form.razao.trim();
+
+    if (!codigo || !razao || cnpj.length !== 14) {
+      setMessage('Preencha codigo, razao social e CNPJ valido (14 digitos).');
+      return;
+    }
+
+    const duplicateCode = clients.find((item) => item.codigo === codigo && item.id !== form.id);
+    if (duplicateCode) {
+      setMessage('Ja existe cliente com este codigo.');
+      return;
+    }
+    const duplicateCnpj = clients.find((item) => item.cnpj === cnpj && item.id !== form.id);
+    if (duplicateCnpj) {
+      setMessage('Ja existe cliente com este CNPJ.');
+      return;
+    }
+
     const now = new Date().toISOString();
 
     if (form.id) {
@@ -54,9 +76,10 @@ export function CadastroClientesPage() {
           ? {
               ...item,
               codigo,
-              razao: form.razao.trim(),
-              cnpj: formatCnpj(form.cnpj),
+              razao,
+              cnpj,
               representante: form.representante.trim(),
+              contato: form.contato.trim(),
               email: form.email.trim().toLowerCase(),
               updatedAt: now,
             }
@@ -65,15 +88,17 @@ export function CadastroClientesPage() {
       setClients(next);
       saveClients(next);
       resetForm();
+      setMessage('Cliente atualizado.');
       return;
     }
 
     const nextItem: FarmaClient = {
       id: createId('cli'),
       codigo,
-      razao: form.razao.trim(),
-      cnpj: formatCnpj(form.cnpj),
+      razao,
+      cnpj,
       representante: form.representante.trim(),
+      contato: form.contato.trim(),
       email: form.email.trim().toLowerCase(),
       createdAt: now,
       updatedAt: now,
@@ -82,6 +107,7 @@ export function CadastroClientesPage() {
     setClients(next);
     saveClients(next);
     resetForm();
+    setMessage('Cliente cadastrado.');
   };
 
   const onEdit = (item: FarmaClient) => {
@@ -89,10 +115,12 @@ export function CadastroClientesPage() {
       id: item.id,
       codigo: item.codigo,
       razao: item.razao,
-      cnpj: item.cnpj,
+      cnpj: maskCnpjValue(item.cnpj),
       representante: item.representante,
+      contato: item.contato,
       email: item.email,
     });
+    setMessage('');
   };
 
   const onDelete = (id: string) => {
@@ -100,12 +128,37 @@ export function CadastroClientesPage() {
     setClients(next);
     saveClients(next);
     if (form.id === id) resetForm();
+    setMessage('Cliente excluido.');
+  };
+
+  const onExport = () => {
+    const backup = exportFarmaBackup();
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    downloadBlob(blob, `mscga-farma-backup-${Date.now()}.json`);
+  };
+
+  const onImport = async (file: File | null) => {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text) as unknown;
+      const result = importFarmaBackup(parsed);
+      if (!result.ok) {
+        setMessage(result.message);
+        return;
+      }
+      setClients(loadClients());
+      setMessage(result.message);
+      if (form.id) resetForm();
+    } catch {
+      setMessage('Nao foi possivel importar o arquivo.');
+    }
   };
 
   return (
     <section>
       <h1>CADASTRO DE CLIENTES</h1>
-      <p>Cadastro nativo no MSCGA, com persistencia local.</p>
+      <p>Cadastro operacional com validacao de codigo/CNPJ e backup do modulo FARMA.</p>
 
       <form className="card farma-form" onSubmit={onSubmit}>
         <h2>{form.id ? 'Editar cliente' : 'Novo cliente'}</h2>
@@ -114,7 +167,7 @@ export function CadastroClientesPage() {
             Codigo
             <input
               value={form.codigo}
-              onChange={(e) => setForm((prev) => ({ ...prev, codigo: onlyDigits(e.target.value).slice(0, 6) }))}
+              onChange={(e) => setForm((prev) => ({ ...prev, codigo: normalizeCodigo(e.target.value) }))}
               inputMode="numeric"
               maxLength={6}
             />
@@ -123,7 +176,7 @@ export function CadastroClientesPage() {
             CNPJ
             <input
               value={form.cnpj}
-              onChange={(e) => setForm((prev) => ({ ...prev, cnpj: formatCnpj(e.target.value) }))}
+              onChange={(e) => setForm((prev) => ({ ...prev, cnpj: maskCnpjValue(e.target.value) }))}
             />
           </label>
           <label>
@@ -136,6 +189,10 @@ export function CadastroClientesPage() {
               value={form.representante}
               onChange={(e) => setForm((prev) => ({ ...prev, representante: e.target.value }))}
             />
+          </label>
+          <label>
+            Contato
+            <input value={form.contato} onChange={(e) => setForm((prev) => ({ ...prev, contato: e.target.value }))} />
           </label>
           <label className="farma-span-2">
             E-mail
@@ -153,7 +210,19 @@ export function CadastroClientesPage() {
               Cancelar edicao
             </button>
           ) : null}
+          <button type="button" className="farma-btn-secondary" onClick={onExport}>
+            Exportar backup
+          </button>
+          <label className="farma-file-button">
+            Importar backup
+            <input
+              type="file"
+              accept="application/json"
+              onChange={(e) => onImport(e.target.files?.[0] || null)}
+            />
+          </label>
         </div>
+        {message ? <p>{message}</p> : null}
       </form>
 
       <section className="card farma-list">
@@ -169,6 +238,7 @@ export function CadastroClientesPage() {
                 <th>Razao social</th>
                 <th>CNPJ</th>
                 <th>Representante</th>
+                <th>Contato</th>
                 <th>E-mail</th>
                 <th>Acoes</th>
               </tr>
@@ -178,8 +248,9 @@ export function CadastroClientesPage() {
                 <tr key={item.id}>
                   <td>{item.codigo}</td>
                   <td>{item.razao}</td>
-                  <td>{item.cnpj || '-'}</td>
+                  <td>{maskCnpjValue(item.cnpj) || '-'}</td>
                   <td>{item.representante || '-'}</td>
+                  <td>{item.contato || '-'}</td>
                   <td>{item.email || '-'}</td>
                   <td>
                     <div className="farma-inline-actions">
@@ -195,7 +266,7 @@ export function CadastroClientesPage() {
               ))}
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6}>Nenhum cliente encontrado.</td>
+                  <td colSpan={7}>Nenhum cliente encontrado.</td>
                 </tr>
               ) : null}
             </tbody>

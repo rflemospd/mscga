@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import type { ExtrajudicialTemplate } from './types';
-import { formatCnpj } from './utils';
+import { downloadBlob, formatCnpj, formatDateBRFromISO, getTodayISO, parseDateBR, parseISODate, toISODate } from './utils';
 
 function getBasePath(): string {
   const pathname = window.location.pathname || '/';
@@ -12,12 +12,34 @@ export function NotificacaoExtrajudicialPage() {
   const [template, setTemplate] = useState<ExtrajudicialTemplate>('nds');
   const [razao, setRazao] = useState('');
   const [cnpj, setCnpj] = useState('');
+  const [data, setData] = useState(getTodayISO());
   const [titulos, setTitulos] = useState('');
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
+  const parseRows = () => {
+    return titulos
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const parts = line.includes('\t')
+          ? line.split('\t')
+          : line
+              .replace(/\s{2,}/g, '|')
+              .split('|')
+              .map((part) => part.trim());
+        if (parts.length >= 5) return [parts[0], parts[1], parts[3], parts[4]];
+        if (parts.length >= 4) return [parts[0], parts[1], parts[2], parts[3]];
+        return [line, '', '', ''];
+      });
+  };
+
   const generate = async () => {
-    if (!razao.trim()) return;
+    if (!razao.trim() && !cnpj.trim() && !titulos.trim()) {
+      setError('Preencha ao menos razao social, CNPJ ou titulos.');
+      return;
+    }
     setProcessing(true);
     setError('');
     try {
@@ -34,7 +56,10 @@ export function NotificacaoExtrajudicialPage() {
       const width = page.getWidth();
       const height = page.getHeight();
 
-      const date = new Date().toLocaleDateString('pt-BR');
+      const parsedIso = parseISODate(data);
+      const parsedBr = parseDateBR(data);
+      const dateIso = parsedIso ? toISODate(parsedIso) : parsedBr ? toISODate(parsedBr) : getTodayISO();
+      const dateBr = formatDateBRFromISO(dateIso);
       page.drawText(`RAZAO SOCIAL: ${razao.toUpperCase()}`, {
         x: 54,
         y: height - 205,
@@ -49,7 +74,7 @@ export function NotificacaoExtrajudicialPage() {
         font,
         color: rgb(0, 0, 0),
       });
-      page.drawText(`DATA: ${date}`, {
+      page.drawText(`DATA: ${dateBr}`, {
         x: width - 170,
         y: height - 145,
         size: 11,
@@ -57,34 +82,37 @@ export function NotificacaoExtrajudicialPage() {
         color: rgb(0, 0, 0),
       });
 
-      const rows = titulos
-        .split('\n')
-        .map((line) => line.trim())
-        .filter(Boolean);
+      const rows = parseRows();
+      const colX = [58, 200, 305, 410];
+      const headers = ['NOTA FISCAL', 'PARCELA', 'VENCIMENTO', 'R$ VALOR'];
       const startY = height - 330;
-      rows.slice(0, 14).forEach((line, index) => {
-        page.drawText(line.toUpperCase(), {
-          x: 58,
-          y: startY - index * 16,
+      headers.forEach((header, index) => {
+        page.drawText(header, {
+          x: colX[index],
+          y: startY,
           size: 10,
-          font,
+          font: bold,
           color: rgb(0, 0, 0),
+        });
+      });
+      rows.slice(0, 18).forEach((row, rowIndex) => {
+        const y = startY - 18 - rowIndex * 14;
+        row.forEach((cell, index) => {
+          page.drawText(String(cell || '').toUpperCase(), {
+            x: colX[index],
+            y,
+            size: 9,
+            font,
+            color: rgb(0, 0, 0),
+          });
         });
       });
 
       const out = await doc.save();
+      const fileName = `notificacao-extrajudicial-${template}-${Date.now()}.pdf`;
       const blobBytes = new Uint8Array(out.byteLength);
       blobBytes.set(out);
-      const blob = new Blob([blobBytes], { type: 'application/pdf' });
-      const fileName = `notificacao-extrajudicial-${template}-${Date.now()}.pdf`;
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = fileName;
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-      URL.revokeObjectURL(url);
+      downloadBlob(new Blob([blobBytes], { type: 'application/pdf' }), fileName);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao gerar PDF.');
     } finally {
@@ -112,6 +140,10 @@ export function NotificacaoExtrajudicialPage() {
             CNPJ
             <input value={cnpj} onChange={(e) => setCnpj(formatCnpj(e.target.value))} />
           </label>
+          <label>
+            Data
+            <input type="date" value={data} onChange={(e) => setData(e.target.value)} />
+          </label>
           <label className="farma-span-2">
             Razao social
             <input value={razao} onChange={(e) => setRazao(e.target.value)} />
@@ -121,7 +153,7 @@ export function NotificacaoExtrajudicialPage() {
             <textarea
               value={titulos}
               onChange={(e) => setTitulos(e.target.value)}
-              placeholder="NF 1234 - R$ 1.200,00"
+              placeholder="000155148-1    001    21/11/2025    05/12/2025    864,00"
             />
           </label>
         </div>
