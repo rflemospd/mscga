@@ -17,12 +17,15 @@ export async function pbkdf2Hash(password: string, record: UserRecord): Promise<
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, [
     'deriveBits',
   ]);
+  const decodedSalt = b64ToBytes(record.salt);
+  const salt = new Uint8Array(decodedSalt.byteLength);
+  salt.set(decodedSalt);
 
   const bits = await crypto.subtle.deriveBits(
     {
       name: 'PBKDF2',
       hash: record.hashAlg,
-      salt: b64ToBytes(record.salt).buffer,
+      salt,
       iterations: record.iterations,
     },
     key,
