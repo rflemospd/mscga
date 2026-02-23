@@ -18,11 +18,11 @@
     "dkLen": 32
   },
   {
-    "username": "admin1",
+    "username": "admin",
     "role": "admin",
     "salt": "uA7M1k3GTUE01SJTvBgXjg==",
     "iterations": 310000,
-    "hash": "CxMpq4+UF35xKfvT6d9DQhHSKZiTYSy9HmmifZcTUcA=",
+    "hash": "F8/mF6Q8hJyXBxFF19Jm5NF5UD44AZCGsJag2zHp6tc=",
     "hashAlg": "SHA-256",
     "dkLen": 32
   }
