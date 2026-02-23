@@ -85,24 +85,6 @@ main {
   background: #1d4ed8;
 }
 
-.farma-module {
-  display: grid;
-  gap: 1rem;
-}
-
-.farma-module-actions {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.farma-module-frame {
-  width: 100%;
-  min-height: 78vh;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #fff;
-}
 
 .login-card {
   max-width: 420px;

@@ -4,6 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CobTool</title>
+  <script>
+    (function ensureMscgaSession(){
+      try{
+        var raw=sessionStorage.getItem('mscga-session');
+        if(!raw){
+          window.location.replace('../#/login');
+          return;
+        }
+        var session=JSON.parse(raw);
+        var role=String(session&&session.role||'');
+        if(role!=='farma' && role!=='admin'){
+          window.location.replace('../#/denied');
+        }
+      }catch(_e){
+        window.location.replace('../#/login');
+      }
+    })();
+  </script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230e0f10'/%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-size='28' fill='%23e9e9ea'%3ECT%3C/text%3E%3C/svg%3E">
